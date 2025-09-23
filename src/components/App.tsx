@@ -16,7 +16,7 @@ export interface AppProps {
  * - Character assignment and management
  * - No tab navigation - game is the main focus
  */
-export default function App() {
+export default function App({ title: _title }: AppProps = {}) {
   // --- Hooks ---
   const { isSDKLoaded, context } = useMiniApp();
 

@@ -21,7 +21,6 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaRandom,
-  FaShare,
   FaTwitter
 } from 'react-icons/fa';
 import { KPOP_CHARACTERS } from '../../lib/kpop-characters';
