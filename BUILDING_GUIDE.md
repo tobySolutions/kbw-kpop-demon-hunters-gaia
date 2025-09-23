@@ -1,18 +1,19 @@
-# Building an AI Pet Companion for Farcaster Mini Apps 🐧✨
+# Building KPop Demon Hunters for Farcaster Mini Apps 🎤⚡
 
-This guide will walk you through building your own AI-powered pet companion similar to the Pudgy Pet, complete with personality, stats, and interactive features for Farcaster mini apps.
+This guide will walk you through building your own mystical KPop Demon Hunter experience with character interactions, spiritual bonding, and demon fighting mechanics for Farcaster mini apps.
 
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
 2. [Project Setup](#project-setup)
 3. [Core Architecture](#core-architecture)
-4. [Building the Pet System](#building-the-pet-system)
-5. [AI Integration](#ai-integration)
-6. [UI Components](#ui-components)
-7. [Farcaster Frame Integration](#farcaster-frame-integration)
-8. [Deployment](#deployment)
-9. [Customization Ideas](#customization-ideas)
+4. [Building the Hunter System](#building-the-hunter-system)
+5. [Character Data & Lore](#character-data--lore)
+6. [AI Integration](#ai-integration)
+7. [UI Components](#ui-components)
+8. [Farcaster Integration](#farcaster-integration)
+9. [Deployment](#deployment)
+10. [Customization Ideas](#customization-ideas)
 
 ## Prerequisites
 
@@ -97,26 +98,25 @@ type PetAction =
   | 'chat';   // Free-form AI conversation
 ```
 
-## Building the Pet System
+## Building the Hunter System
 
-### 1. Create the Core Pet Logic
+### 1. Create the Core Hunter Logic
+
+The KPop Demon Hunter system uses a sophisticated character selection and interaction system:
 
 ```typescript
-// lib/petSystem.ts
-export class PetSystem {
-  // Calculate mood based on stats
-  static calculateMood(stats: PetStats): string {
-    const avgStat = (stats.happiness + stats.energy + stats.hunger) / 3;
-    if (avgStat >= 80) return 'ecstatic';
-    if (avgStat >= 60) return 'happy';
-    if (avgStat >= 40) return 'content';
-    if (avgStat >= 20) return 'sad';
-    return 'cranky';
-  }
+// lib/kpop-characters.ts
+export const generateRandomCharacter = (): KPopCharacter => {
+  return characters[Math.floor(Math.random() * characters.length)];
+};
 
-  // Apply time-based stat decay
-  static decayStats(stats: PetStats): PetStats {
-    const now = Date.now();
+// Calculate hunter power based on interactions
+export const calculateHunterPower = (character: KPopCharacter, interactions: number): number => {
+  const basePower = character.rarity === 'mythic' ? 100 : 
+                   character.rarity === 'legendary' ? 80 :
+                   character.rarity === 'rare' ? 60 : 40;
+  return Math.min(basePower + interactions * 2, 150);
+};
     const hoursPassed = (now - stats.lastInteraction) / (1000 * 60 * 60);
     
     return {
@@ -185,6 +185,23 @@ export const storage = useRedis
     };
 ```
 
+## Character Data & Lore
+
+The application features 12 unique KPop Demon Hunters, each with detailed backstories, powers, and personalities:
+
+### Character Categories
+- **Main Heroes**: Abby, Bobby, Celine - The primary demon hunters
+- **Support Heroes**: Gwima, Healer Han, Jinu, Mira - Specialized support roles  
+- **Mysterious/Antagonist**: Mystery, Romance, Rumi, Ryu Mi-Yeong, Zoey - Complex characters with hidden agendas
+
+### Character Properties
+Each character includes:
+- Unique powers and abilities
+- Detailed backstory and personality
+- Rarity level (common, rare, legendary, mythic)
+- Character image and visual representation
+- Role-specific dialogue patterns
+
 ## AI Integration
 
 ### 1. Create AI Service
@@ -192,12 +209,12 @@ export const storage = useRedis
 ```typescript
 // lib/aiService.ts
 export class AIService {
-  static async generateResponse(prompt: string, stats: PetStats): Promise<string> {
+  static async generateResponse(prompt: string, character: KPopCharacter): Promise<string> {
     if (!process.env.GAIA_API_KEY) {
-      return this.getFallbackResponse(prompt);
+      return this.getFallbackResponse(prompt, character);
     }
 
-    const systemPrompt = `You are an adorable AI pet companion! 🐾
+    const systemPrompt = `You are ${character.name}, a KPop Demon Hunter! ⚔️
     
 Your personality:
 - Super cute and expressive ✨
@@ -238,12 +255,14 @@ Respond with 1-2 sentences full of personality!`;
     }
   }
 
-  static getFallbackResponse(prompt: string): string {
-    // Contextual fallback responses
-    if (prompt.includes('feed')) return "Yum yum! 🍎✨ Thanks for feeding me!";
-    if (prompt.includes('play')) return "Wheee! 🎾😄 That was so fun!";
-    if (prompt.includes('pet')) return "Purrrr~ 🥰 I love cuddles!";
-    return "Hello! 😊 I'm your cute AI pet! What should we do?";
+  static getFallbackResponse(prompt: string, character: KPopCharacter): string {
+    // Character-specific fallback responses
+    const responses = [
+      `As ${character.name}, I'm ready for our next demon hunting mission! ⚔️`,
+      `${character.name} here! My ${character.power} is at your service! 🔥`,
+      `Let's hunt some demons together! I'm ${character.name}! 👹⚡`,
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
   }
 }
 ```
@@ -251,16 +270,25 @@ Respond with 1-2 sentences full of personality!`;
 ### 2. Create API Endpoints
 
 ```typescript
-// app/api/pet/route.ts
+// app/api/hunter-ai/route.ts
 import { NextResponse } from 'next/server';
-import { PetSystem } from '@/lib/petSystem';
-import { AIService } from '@/lib/aiService';
-import { storage } from '@/lib/storage';
+import { KPopCharacter } from '@/lib/kpop-characters';
 
-const DEFAULT_STATS = {
-  hunger: 50,
-  happiness: 70,
-  energy: 80,
+export async function POST(request: Request) {
+  try {
+    const { message, character } = await request.json();
+
+    const systemPrompt = `You are ${character.name}, a KPop Demon Hunter.
+    
+Character Details:
+- Power: ${character.power}
+- Abilities: ${character.abilities.join(', ')}
+- Personality: ${character.personality}
+- Backstory: ${character.backstory}
+
+Respond as this character would, staying true to their personality and background. Keep responses engaging and under 150 words.`;
+
+    const response = await fetch('https://llama.us.gaianet.network/v1/chat/completions', {
   mood: 'content',
   lastInteraction: Date.now()
 };
@@ -290,36 +318,46 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const { action, userId, message } = await request.json();
-    
-    if (!action || !userId) {
-      return NextResponse.json({ error: 'Action and userId required' }, { status: 400 });
-    }
+    const data = await response.json();
+    const aiResponse = data.choices?.[0]?.message?.content || 
+      `As ${character.name}, I'm ready for our next mission! ⚔️`;
 
-    let stats = await storage.get(`pet:${userId}`) || DEFAULT_STATS;
-    stats = PetSystem.decayStats(stats);
-    stats = PetSystem.processAction(action, stats);
+    return NextResponse.json({ 
+      message: aiResponse,
+      character: character.name,
+      power: character.power
+    });
 
-    const prompt = message || `User performed action: ${action}. React accordingly!`;
-    const aiMessage = await AIService.generateResponse(prompt, stats);
-
-    await storage.set(`pet:${userId}`, stats);
-
-    return NextResponse.json({ message: aiMessage, stats, action });
   } catch (error) {
-    return NextResponse.json({ error: 'Action failed' }, { status: 500 });
+    console.error('AI API Error:', error);
+    return NextResponse.json({ 
+      message: `As ${character.name}, I'm ready to hunt demons with you! 🔥`,
+      character: character.name,
+      power: character.power
+    });
   }
 }
 ```
 
 ## UI Components
 
-### 1. Main Pet Component
+### 1. Main Hunter Component
+
+The core UI component is `KPopHunter.tsx`, which handles:
 
 ```typescript
-// components/Pet.tsx
+// components/ui/KPopHunter.tsx
+export default function KPopHunter() {
+  const [character, setCharacter] = useState<KPopCharacter | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Generate random character on mount
+  useEffect(() => {
+    const newCharacter = generateRandomCharacter();
+    setCharacter(newCharacter);
+    setMessages([]); // Clear chat when character changes
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -359,57 +397,49 @@ export default function Pet({ userId }: PetProps) {
       const data = await response.json();
       setPetData(data);
     } catch (error) {
-      console.error('Action failed:', error);
+  }, []);
+
+  const sendMessage = async (message: string) => {
+    if (!character || !message.trim()) return;
+
+    setIsLoading(true);
+    const userMessage: Message = { role: 'user', content: message };
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+
+    try {
+      const response = await fetch('/api/hunter-ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, character }),
+      });
+
+      const data = await response.json();
+      const aiMessage: Message = { role: 'assistant', content: data.message };
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Failed to send message:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (!petData) return <div>Loading your pet...</div>;
-
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6">
-      {/* Pet Avatar */}
-      <div className="text-center mb-4">
-        <div className="text-6xl mb-2 animate-bounce">🐾</div>
-        <h2 className="text-xl font-bold">Your AI Pet</h2>
-        <p className="text-sm text-gray-600 capitalize">Mood: {petData.stats.mood}</p>
+    <div className="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 rounded-2xl p-6 text-white">
+      {/* Character Display */}
+      <div className="text-center mb-6">
+        <div className="relative mx-auto w-32 h-32 mb-4">
+          <Image
+            src={character?.image || '/Mystery.webp'}
+            alt={character?.name || 'Hunter'}
+            fill
+            className="rounded-full object-cover border-4 border-yellow-400 shadow-lg"
+          />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">{character?.name}</h2>
+        <p className="text-yellow-300 text-sm mb-2">Power: {character?.power}</p>
+        <p className="text-gray-300 text-xs">{character?.personality}</p>
       </div>
-
-      {/* Pet Message */}
-      <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-        <p className="text-gray-800">{petData.message}</p>
-      </div>
-
-      {/* Stats Display */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        {(['hunger', 'happiness', 'energy'] as const).map((stat) => (
-          <div key={stat} className="bg-white rounded-lg p-3 text-center">
-            <div className="text-2xl mb-1">
-              {stat === 'hunger' && '🍎'}
-              {stat === 'happiness' && '😊'}
-              {stat === 'energy' && '⚡'}
-            </div>
-            <div className="text-sm font-medium capitalize">{stat}</div>
-            <div className="text-lg font-bold">{petData.stats[stat]}/100</div>
-            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div 
-                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${petData.stats[stat]}%` }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Action Buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          onClick={() => performAction('feed')}
-          disabled={isLoading}
-          className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 disabled:opacity-50"
-        >
-          🍎 Feed
         </button>
         <button
           onClick={() => performAction('play')}
@@ -446,48 +476,52 @@ export default function Pet({ userId }: PetProps) {
 
 import { useState } from 'react';
 
-interface PetChatProps {
-  userId: string;
-  onMessage: (message: string) => void;
-}
+      {/* Action Buttons */}
+      <div className="flex gap-3 mb-6">
+        <button
+          onClick={() => generateNewCharacter()}
+          className="flex-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-3 px-6 rounded-xl hover:from-yellow-300 hover:to-orange-400 transition-all duration-200 shadow-lg"
+        >
+          ⚡ New Hunter
+        </button>
+        <button
+          onClick={() => shareOnX()}
+          className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 px-6 rounded-xl hover:from-blue-400 hover:to-cyan-400 transition-all duration-200 shadow-lg"
+        >
+          📢 Share
+        </button>
+      </div>
 
-export default function PetChat({ userId, onMessage }: PetChatProps) {
-  const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+      {/* Chat Interface */}
+      <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 mb-4 max-h-96 overflow-y-auto">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`mb-3 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+            <div className={`inline-block p-3 rounded-lg max-w-[80%] ${
+              msg.role === 'user' 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-gray-700 text-gray-100'
+            }`}>
+              {msg.content}
+            </div>
+          </div>
+        ))}
+        {isLoading && (
+          <div className="text-center">
+            <div className="inline-block p-3 rounded-lg bg-gray-700 text-gray-100">
+              Thinking... 🤔
+            </div>
+          </div>
+        )}
+      </div>
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim() || isLoading) return;
-
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/pet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'chat', 
-          userId, 
-          message: message.trim() 
-        })
-      });
-      
-      const data = await response.json();
-      onMessage(data.message);
-      setMessage('');
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <form onSubmit={sendMessage} className="flex gap-2">
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Chat with your pet..."
+      {/* Message Input */}
+      <form onSubmit={(e) => { e.preventDefault(); sendMessage(inputMessage); }}>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Ask your hunter anything..."
         className="flex-1 p-3 border rounded-lg"
         disabled={isLoading}
       />
@@ -503,46 +537,46 @@ export default function PetChat({ userId, onMessage }: PetChatProps) {
 }
 ```
 
-## Farcaster Frame Integration
+## Farcaster Integration
 
-### 1. Frame API Endpoint
+The app integrates with Farcaster for social sharing and community features:
+
+### 1. Share Functionality
 
 ```typescript
-// app/api/frame/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+// Share to X (Twitter) integration in KPopHunter component
+const shareOnX = () => {
+  if (!character) return;
+  
+  const shareText = `Just met ${character.name}, a ${character.category} hunter with ${character.power}! Join me in hunting demons! @Gaianet_ai`;
+  const shareUrl = `${window.location.origin}/share/${fid || 'demo'}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+  
+  window.open(twitterUrl, '_blank');
+};
+```
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId') || 'demo-user';
+### 2. Neynar Integration
 
-  // Get pet stats (implementation similar to above)
-  // Generate frame HTML with meta tags
+```typescript
+// hooks/useNeynarUser.ts - Farcaster user data integration
+import { useEffect, useState } from 'react';
 
-  const frameHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:image" content="${process.env.NEXT_PUBLIC_URL}/api/frame/image?userId=${userId}" />
-        <meta property="fc:frame:button:1" content="🍎 Feed" />
-        <meta property="fc:frame:button:1:action" content="post" />
-        <meta property="fc:frame:button:1:target" content="${process.env.NEXT_PUBLIC_URL}/api/frame?action=feed&userId=${userId}" />
-        <!-- Add more buttons -->
-      </head>
-      <body>
-        <h1>AI Pet Frame</h1>
-      </body>
-    </html>
-  `;
+export function useNeynarUser(fid?: string) {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  return new NextResponse(frameHtml, {
-    headers: { 'Content-Type': 'text/html' },
-  });
-}
+  useEffect(() => {
+    if (!fid) {
+      setLoading(false);
+      return;
+    }
+    
+    // Fetch user data from Neynar API
+    // Implementation depends on specific Neynar endpoints
+  }, [fid]);
 
-export async function POST(request: NextRequest) {
-  // Handle frame interactions
-  // Process actions and return updated frame
+  return { user, loading };
 }
 ```
 
@@ -611,59 +645,67 @@ In your Vercel dashboard, add:
 
 ## Customization Ideas
 
-### 1. Different Pet Types
-- Create multiple pet personalities (cat, dog, dragon, etc.)
-- Different stat systems per type
-- Unique behaviors and responses
+### 1. Character Expansions
+- **New Characters**: Add more hunters with unique powers and backstories
+- **Character Evolution**: Hunters that grow stronger with interactions  
+- **Team Formation**: Multiple hunters working together
+- **Character Relationships**: Hunters that remember each other
 
-### 2. Advanced Features
-- **Breeding System**: Combine two pets to create new ones
-- **Items & Accessories**: Virtual items to customize pets
-- **Mini Games**: Interactive games that affect stats
-- **Social Features**: Pet playdates, leaderboards
-- **Evolution**: Pets that change appearance based on care
+### 2. Advanced AI Features
+- **Voice Chat**: Add speech-to-text for voice commands to hunters
+- **Image Recognition**: Hunters react to demon photos or battle scenes
+- **Mission Memory**: Long-term memory of demon hunting missions
+- **Multi-language**: Support for Korean, Japanese, English, and more
 
-### 3. Monetization Options
-- **Premium Pets**: Special breeds with unique abilities
-- **Cosmetic Items**: Backgrounds, accessories, animations
-- **Boost Items**: Temporary stat multipliers
-- **Social Features**: Group activities, tournaments
+### 3. Game Mechanics
+- **Battle System**: Turn-based combat against demons
+- **Equipment System**: Weapons and armor for hunters
+- **Achievement System**: Unlock new abilities and characters  
+- **Leaderboards**: Compete with other demon hunters
 
-### 4. Technical Enhancements
-- **Real-time Updates**: WebSocket connections for live interactions
-- **Push Notifications**: Remind users when pets need care
-- **Analytics**: Track user engagement and pet statistics
-- **A/B Testing**: Test different personalities and features
+### 4. Social Features
+- **Guild System**: Join hunter guilds for group missions
+- **Trading**: Exchange characters and equipment
+- **Tournaments**: Competitive demon hunting events
+- **Shared Universe**: Characters that exist across multiple apps
 
 ## Best Practices
 
-1. **Performance**: Cache AI responses when possible
-2. **Error Handling**: Always provide fallback responses
-3. **User Experience**: Keep interactions fast and responsive
-4. **Data Privacy**: Secure user data and pet information
-5. **Scalability**: Design for growth from the start
+1. **Performance**: Cache AI responses and character data when possible
+2. **Error Handling**: Always provide fallback responses for AI failures
+3. **User Experience**: Keep character interactions fast and responsive
+4. **Character Consistency**: Maintain personality traits across conversations
+5. **Scalability**: Design character system for easy expansion
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **AI API Failures**: Always implement fallback responses
-2. **Rate Limiting**: Add delays between API calls
-3. **Storage Issues**: Test both Redis and local storage modes
-4. **Frame Display**: Validate meta tags with Farcaster debugger
+1. **AI API Failures**: Always implement character-specific fallback responses
+2. **Rate Limiting**: Add delays between AI chat requests
+3. **Character Loading**: Ensure character images are properly loaded
+4. **Share Functionality**: Test X (Twitter) sharing with proper URL encoding
 
 ### Debugging Tips
 
-- Log AI API responses for debugging
-- Test with different user IDs
-- Monitor pet stat changes over time
-- Use browser dev tools for frame testing
+- Log AI API responses and character selections for debugging
+- Test with different characters and message types
+- Monitor chat clearing when switching characters
+- Use browser dev tools for share button testing
 
 ## Next Steps
 
-After building your basic AI pet:
+After building your KPop Demon Hunter app:
 
-1. **User Testing**: Get feedback from real users
+1. **User Testing**: Get feedback from real users on character interactions
+2. **Character Expansion**: Add more unique hunters with different abilities
+3. **Battle System**: Implement demon combat mechanics
+4. **Community Features**: Add guilds, tournaments, and leaderboards
+5. **Mobile Optimization**: Ensure smooth performance on mobile devices
+
+## Conclusion
+
+This guide shows how to build a comprehensive KPop Demon Hunter application with AI-powered character interactions, social sharing, and Farcaster integration. The modular architecture allows for easy expansion and customization to create unique gaming experiences.
 2. **Feature Iteration**: Add requested features
 3. **Performance Optimization**: Monitor and improve speed
 4. **Community Building**: Engage with your users

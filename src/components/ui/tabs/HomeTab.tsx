@@ -1,7 +1,7 @@
 "use client";
 
 import { useMiniApp } from "@neynar/react";
-import PudgyPet from "../PudgyPet";
+import KPopHunter from "../KPopHunter";
 
 /**
  * HomeTab component displays the main Pudgy AI pet interface.
@@ -41,7 +41,7 @@ export function HomeTab() {
       </div>
       
       <div className="w-full">
-        <PudgyPet userId={userId} />
+        <KPopHunter userId={userId} />
       </div>
       
       <div className="mt-3 text-center bg-gradient-to-br from-pudgy-floral via-white to-pudgy-azure backdrop-blur-md rounded-xl p-3 border border-pudgy-sky/30 shadow-lg">

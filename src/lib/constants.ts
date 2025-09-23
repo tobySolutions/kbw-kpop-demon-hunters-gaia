@@ -22,13 +22,13 @@ export const APP_URL: string = process.env.NEXT_PUBLIC_URL!;
  * The name of the mini app as displayed to users.
  * Used in titles, headers, and app store listings.
  */
-export const APP_NAME: string = 'pudgy-agent';
+export const APP_NAME: string = 'KPop Demon Hunters';
 
 /**
  * A brief description of the mini app's functionality.
  * Used in app store listings and metadata.
  */
-export const APP_DESCRIPTION: string = 'A Farcaster mini app created with Neynar';
+export const APP_DESCRIPTION: string = 'Summon your KPop Demon Hunter companion and join the battle to protect the human world through the power of music and spiritual bonds!';
 
 /**
  * The primary category for the mini app.
@@ -40,14 +40,14 @@ export const APP_PRIMARY_CATEGORY: string = '';
  * Tags associated with the mini app.
  * Used for search and discovery in app stores.
  */
-export const APP_TAGS: string[] = ['Gaia'];
+export const APP_TAGS: string[] = ['KPop', 'Demon Hunters', 'KBW', 'Spiritual', 'Music', 'Gaia'];
 
 // --- Asset URLs ---
 /**
  * URL for the app's icon image.
  * Used in app store listings and UI elements.
  */
-export const APP_ICON_URL: string = `${APP_URL}/icon.png`;
+export const APP_ICON_URL: string = `${APP_URL}/characters.png`;
 
 /**
  * URL for the app's Open Graph image.

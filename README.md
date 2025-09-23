@@ -1,95 +1,127 @@
-# Pudgy AI Pet Integration 🐧✨
+# KPop Demon Hunters 🎤⚡
 
 ## Overview
 
-This integration adds an adorable Pudgy AI pet companion to your Farcaster mini app! The pet has a vibrant personality, genuine emotions, and needs just like a real pet. It's part of the Pudgy Penguins ecosystem and brings kawaii fun to your app.
+Experience the mystical world of KPop Demon Hunters! Train and bond with powerful demon hunters who fight evil forces using the power of music and magic. Each hunter has unique abilities, weapons, and personalities in an epic battle to maintain the Honmoon barrier and protect humanity from Gwi-Ma, the demon king.
 
 ## Features
 
-### 🐾 Pet Personality
-- Super cute, expressive, and full of energy
-- Uses lots of emojis and has a playful personality
-- Sometimes mischievous but always loveable
-- Remembers how users treat them and reacts accordingly
-- Part of the Pudgy Penguins ecosystem
+### 🎭 Hunter Characters
+- **12 Unique Characters**: Random character selection from the full roster
+- **3 Categories**: Huntr/x heroes, Saja Boys antagonists, and wise allies
+- **Authentic Personalities**: Each hunter has distinct traits, weapons, and powers
+- **Dynamic Interactions**: Character-specific responses based on lore and abilities
+- **Character Switching**: Navigate through all hunters with arrow buttons
 
-### 📊 Pet Stats System
-- **Hunger (🍎)**: Gets hungry over time, feed to increase
-- **Happiness (😊)**: Affected by interactions, play and pet to increase
-- **Energy (⚡)**: Decreases with play, increases with rest
-- **Mood**: Changes based on overall stats (ecstatic, happy, content, sad, cranky)
+### 📊 Hunter Stats System
+- **Spiritual Energy (⚡)**: Channel energy to restore power levels
+- **Connection Strength (�)**: Bond with your hunter through interactions
+- **Battle Readiness (🗡️)**: Train to maintain combat effectiveness
+- **Hunter Rank (🏆)**: Overall performance ranking from 1-10
+- **Mood**: Current spiritual state affecting abilities
 
-### 🎮 Interactive Actions
-- **Feed (🍎)**: Increases hunger and happiness
-- **Play (🎾)**: Increases happiness but decreases energy
-- **Pet/Cuddle (🥰)**: Increases happiness and slightly increases energy
-- **Sleep (😴)**: Increases energy significantly
-- **Check Status (📊)**: Get current stats and mood
+### 🎮 Mystical Actions
+- **Channel Energy (⚡)**: Restore spiritual power for demon fighting
+- **Train (�)**: Practice sonic magic and vocal techniques
+- **Bond (💜)**: Strengthen spiritual connection with your hunter
+- **Meditate (🧘)**: Enter deep meditation to restore battle readiness
+- **Status Check (�)**: Assess current power levels and Honmoon strength
 
-### ⏰ Time-Based Decay
-- Stats naturally decrease over time to encourage regular interaction
-- Hunger decreases by ~5 points per hour
-- Energy decreases by ~2 points per hour  
-- Happiness decreases by ~3 points per hour
+### 🔮 Honmoon Barrier System
+- Stats naturally decay over time as demons test the barriers
+- Spiritual Energy decreases by ~5 points per hour
+- Battle Readiness decreases by ~2 points per hour  
+- Connection Strength decreases by ~3 points per hour
+- Regular interaction maintains barrier strength
 
 ## API Endpoints
 
-### `/api/pudgy-ai`
+### `/api/hunter-ai`
 
-Main API endpoint for pet interactions.
+Main API endpoint for KPop Demon Hunter interactions.
 
 #### GET Request
 ```
-GET /api/pudgy-ai?userId=USER_ID
+GET /api/hunter-ai?userId=USER_ID&character=CHARACTER_JSON
 ```
-Returns current pet status and a greeting message.
+Returns current hunter status and a mystical greeting message.
 
 #### POST Request
 ```javascript
 {
-  "action": "feed|play|pet|sleep|status",
-  "userId": "unique_user_id"
+  "action": "feed|play|pet|sleep|status|chat",
+  "userId": "unique_user_id",
+  "character": {
+    "id": "rumi",
+    "name": "Rumi", 
+    "category": "huntrx",
+    "personality": "confident, conflicted, protective",
+    "specialAbility": "Can embrace her dual identity to break demonic influence",
+    "weapon": "Legendary Geom",
+    "powers": ["Vocal Magic", "Demonic Power", "Leadership"]
+  }
 }
 ```
 
 **Response Format:**
 ```javascript
 {
-  "message": "Om nom nom! 🍎✨ My hunger went up to 80! You're the best!",
+  "message": "⚡✨ Rumi channels spiritual energy! My power grows stronger! The Honmoon barrier pulses with renewed strength! 🌟💫",
   "stats": {
     "hunger": 80,
     "happiness": 75,
     "energy": 65,
-    "mood": "happy",
-    "lastInteraction": 1672531200000
+    "mood": "empowered",
+    "hunterRank": 7,
+    "lastInteraction": 1672531200000,
+    "characterId": "rumi"
+  },
+  "character": {
+    "id": "rumi",
+    "name": "Rumi",
+    "category": "huntrx",
+    // ... character details
   },
   "action": "feed"
 }
 ```
 
-### `/api/pudgy-frame`
+## Character Roster
 
-Farcaster Frame integration for the pet.
+### Huntr/x - The Heroes
+- **Rumi**: Lead vocalist with dual demon-human heritage and legendary geom
+- **Mira**: Main dancer wielding mystical gok-do with precision strikes  
+- **Zoey**: Rapper creating protective barriers through lyrical magic
 
-#### Features:
-- Interactive frame with action buttons
-- Dynamic image generation showing pet stats
-- Persistent state across frame interactions
-- Beautiful gradient backgrounds and emoji indicators
+### Saja Boys - The Antagonists  
+- **Jinu**: Conflicted leader who traded his soul for fame
+- **Abby Saja**: Ancient dark magic strategist  
+- **Baby Saja**: Innocent but corrupted chaos magic wielder
+- **Mystery Saja**: Enigmatic member with hidden devastating powers
+- **Romance Saja**: Charming manipulator using corrupted love magic
+
+### Allies - The Wise Supporters
+- **Celine**: Former demon hunter and master of vocal magic
+- **Healer Han**: Spiritual healer who restores Honmoon barriers
+- **Ryu Mi-yeong**: Traditional Korean warrior preserving ancient techniques  
+- **Bobby**: Charismatic performer amplifying magical power
+
+### The Demon King
+- **Gwi-Ma**: Evil demon king seeking to break the Honmoon barrier
 
 ## React Component Usage
 
-### PudgyPet Component
+### KPopHunter Component
 
 ```tsx
-import PudgyPet from '@/components/ui/PudgyPet';
+import KPopHunter from '@/components/ui/KPopHunter';
 
 function MyApp() {
   const userId = user?.fid?.toString() || 'demo-user';
   
   return (
     <div>
-      <PudgyPet userId={userId} />
+      <KPopHunter userId={userId} />
     </div>
   );
 }
@@ -168,63 +200,72 @@ NEXT_PUBLIC_URL=your_app_url (for frames)
 ## UI Features
 
 ### Stats Display
-- Color-coded stat bars (green/yellow/orange/red)
-- Emoji indicators for each stat type
-- Real-time updates after interactions
-- Animated progress bars
+- Color-coded spiritual energy bars (green/yellow/orange/red)
+- Mystical emoji indicators for each power type
+- Real-time updates after demon hunter interactions
+- Animated progress bars with magical effects
 
-### Action Buttons
-- Colorful, themed buttons for each action
-- Disabled states during loading
-- Responsive grid layout
-- Clear emoji indicators
+### Action Buttons  
+- Themed demon hunter action buttons
+- Disabled states during spiritual channeling
+- Responsive grid layout optimized for mobile
+- Clear magical emoji indicators (⚡🎵💜🧘)
 
-### Mood Visualization
-- Pet emoji changes based on mood
-- Background colors reflect pet state
-- Contextual messages based on needs
+### Character Navigation
+- Arrow buttons to browse all 12 hunters
+- Random character selection with dice button
+- Character portraits with mystical borders
+- Category badges (Huntr/x, Saja Boys, Allies, Demon King)
 
-## Frame Integration
+### Chat System
+- Real-time spiritual communication with hunters
+- Character-specific personality responses
+- Auto-clearing chat when switching characters
+- Markdown message support for enhanced formatting
 
-The Pudgy AI also works as a Farcaster Frame at `/api/pudgy-frame`:
+### Share Functionality
+- One-click sharing to X (Twitter) with hunter stats
+- Automatic @Gaianet_ai mention
+- Includes current website URL for viral growth
+- No hashtag spam for cleaner sharing
+
+## Farcaster Integration
+
+The KPop Demon Hunter experience works seamlessly in Farcaster frames:
 
 ### Frame Features
-- Dynamic SVG image generation
-- Interactive buttons for all pet actions  
-- Persistent state across interactions
-- Error handling with friendly messages
-- Beautiful gradient backgrounds
-- Stats visualization in frame image
+- Dynamic character selection for each user
+- Interactive mystical action buttons
+- Persistent hunter bonding across sessions  
+- Beautiful gradient backgrounds with demon hunter themes
+- Real-time stat visualization in frame format
 
-### Frame Actions
-- 🍎 Feed - Increases hunger and happiness
-- 🎾 Play - Increases happiness, decreases energy
-- 🥰 Pet - Increases happiness and energy slightly
-- 😴 Sleep - Significantly increases energy
+### Mystical Actions
+- ⚡ Channel Energy - Restore spiritual power for demon fighting
+- � Train - Practice sonic magic and combat techniques
+- 💜 Bond - Strengthen connection between hunter and fan
+- 🧘 Meditate - Deep spiritual restoration
 
 ## Getting Started
 
-1. The integration is already set up in your HomeTab
-2. Users with Farcaster accounts get persistent pets tied to their FID
-3. Demo users get a temporary pet experience
-4. Stats decay over time to encourage engagement
-5. All interactions provide immediate feedback with cute responses
+1. The KPop Demon Hunter experience is integrated in your Farcaster app
+2. Each user gets a random character assignment for unique experiences
+3. Users can switch between all 12 hunters at any time
+4. Stats decay over time as demons test the Honmoon barrier
+5. Regular interaction maintains barrier strength and hunter power
 
-## Customization Options
+## Lore & World Building
 
-### Personality Tweaks
-- Modify response messages in the `generatePudgyResponse` function
-- Adjust stat changes for different actions
-- Change decay rates for different engagement patterns
+### The Honmoon Barrier
+A mystical shield powered by music and fan emotion that keeps demons trapped in their realm. The barrier weakens without regular spiritual energy from hunter-fan bonds.
 
-### Visual Customization  
-- Update colors and styling in the PudgyPet component
-- Modify frame SVG generation for different visual themes
-- Add new emoji combinations and mood states
+### Powers & Magic System
+- **Vocal Magic**: Singing that carries spiritual energy
+- **Sonic Combat**: Using music as a weapon against demons  
+- **Spiritual Bonding**: Connection between hunters and their supporters
+- **Barrier Magic**: Maintaining the protective Honmoon shield
 
-### New Actions
-- Add new interaction types in the switch statement
-- Create corresponding UI buttons and handlers
-- Implement unique stat effects and responses
+### The Eternal Struggle
+KPop Demon Hunters fight an ongoing battle against Gwi-Ma and his corrupted Saja Boys, using the power of music, fan support, and spiritual connection to protect humanity.
 
-This Pudgy AI integration brings life and personality to your Farcaster mini app, creating an engaging pet companion experience that users will love to interact with! 🐧💙✨
+This KPop Demon Hunter experience creates an immersive mystical world where users become part of an epic battle between good and evil, powered by music and spiritual bonds! 🎤⚡�️

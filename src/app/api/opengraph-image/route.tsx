@@ -13,38 +13,36 @@ export async function GET(request: NextRequest) {
   return new ImageResponse(
     (
       <div tw="flex h-full w-full flex-col justify-center items-center relative" style={{
-        background: 'linear-gradient(135deg, #F5FDFF 0%, #E9F7FB 50%, #FBE9F3 100%)'
+        background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 50%, #4a2c7a 100%)'
       }}>
-        {/* Pudgy Penguin Image as main visual */}
+        {/* KPop Demon Hunters Main Image */}
         <img 
-          src={`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/pudgy-image.jpg`}
-          alt="Pudgy Penguin" 
-          tw="w-64 h-64 mb-8 rounded-full object-cover border-4 border-white shadow-lg"
+          src={`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/k-pop-demon-main.jpeg`}
+          alt="KPop Demon Hunters" 
+          tw="w-64 h-64 mb-8 rounded-full object-cover border-4 border-purple-400 shadow-lg"
         />
-        
-        {/* Focus purely on Pudgy branding - no user PFP */}
         
         {/* Main Title */}
         <h1 tw="text-7xl font-bold text-center mb-4" style={{
-          color: '#00142D',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+          color: '#ff6b9d',
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
         }}>
-          {user?.display_name ? `${user.display_name}'s Pudgy Pet!` : 'Meet Your Pudgy Pet!'}
+          {user?.display_name ? `${user.display_name}'s Demon Hunter!` : 'Meet Your KPop Demon Hunter!'}
         </h1>
         
         {/* Subtitle */}
         <p tw="text-4xl text-center mb-6" style={{
-          color: '#477DFD'
+          color: '#c77dff'
         }}>
-          Your AI Penguin Companion ✨
+          Your AI KPop Demon Hunter Companion ⚔️✨
         </p>
         
         {/* Footer */}
         <div tw="flex items-center text-2xl" style={{
-          color: '#00142D',
-          opacity: 0.8
+          color: '#e0aaff',
+          opacity: 0.9
         }}>
-          <span tw="mr-2">🪐</span>
+          <span tw="mr-2">🎵</span>
           <span>Powered by Gaia AI</span>
         </div>
       </div>

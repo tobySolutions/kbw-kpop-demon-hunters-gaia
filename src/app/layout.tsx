@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
   icons: {
     icon: [
-      { url: '/pudgy-image.jpg', sizes: '32x32', type: 'image/jpeg' },
-      { url: '/pudgy-image.jpg', sizes: '16x16', type: 'image/jpeg' },
+      { url: '/characters.png', sizes: '32x32', type: 'image/png' },
+      { url: '/characters.png', sizes: '16x16', type: 'image/png' },
     ],
-    apple: { url: '/pudgy-image.jpg', sizes: '180x180', type: 'image/jpeg' },
+    apple: { url: '/k-pop-demon-main.jpeg', sizes: '180x180', type: 'image/jpeg' },
   },
 };
 
