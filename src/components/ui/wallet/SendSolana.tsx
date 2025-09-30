@@ -1,1 +1,0 @@
-// This file has been removed - placeholder to ensure proper git removal
