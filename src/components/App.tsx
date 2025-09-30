@@ -3,6 +3,7 @@
 import { useMiniApp } from "@neynar/react";
 import KPopHunter from "~/components/ui/KPopHunter";
 
+
 export interface AppProps {
   title?: string;
 }
