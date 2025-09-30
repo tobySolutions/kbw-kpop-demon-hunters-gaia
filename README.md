@@ -4,6 +4,8 @@
 
 Experience the mystical world of KPop Demon Hunters! Train and bond with powerful demon hunters who fight evil forces using the power of music and magic. Each hunter has unique abilities, weapons, and personalities in an epic battle to maintain the Honmoon barrier and protect humanity from Gwi-Ma, the demon king.
 
+*Build fixed and deployment ready! 🚀*
+
 ## Features
 
 ### 🎭 Hunter Characters
